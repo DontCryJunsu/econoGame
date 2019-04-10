@@ -4,18 +4,20 @@ using UnityEngine;
 
 public class Mover : MonoBehaviour
 {
+    public GameObject[] Items;
     public float Movedistance;
     public float RLmove;
     public float ac;
     public float FBmove;
     public GameObject Building;
-    public GameObject BA;
+    public GameObject BrokenBuilding;
     public Transform BMposition;
+    public Transform Window;
+    public float t;
+    public int number;
+   
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+  
 
     // Update is called once per frame
     void Update()
@@ -34,12 +36,32 @@ public class Mover : MonoBehaviour
         {
             transform.Translate(0, FBmove * Time.deltaTime, 0);
         }
-     
-        
-          
+        if (Input.GetKey(KeyCode.S))
+        {
+            transform.Translate(0, -FBmove * Time.deltaTime, 0);
+        }
+        if (number > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                number = number - 1;
+                GameObject Item = Items[Random.Range(0, Items.Length)];
+                Vector3 tr = Window.position + new Vector3(0, 1, -0.1f);
+                Quaternion spawnRotation = Quaternion.Euler(new Vector3(0, 180, 0));
+                Instantiate(Item, Window);
+                Instantiate(BrokenBuilding, tr, spawnRotation);
+            }
+        }
     }
+
     private void OnTriggerEnter(Collider other)
     {
+
+        if(other.gameObject.tag == "Hammer")
+        {
+            number = number + 1;
+            Destroy(other.gameObject);
+        }
         if (other.gameObject.tag == "MapMaker")
         {
             Instantiate(Building, BMposition.position, BMposition.rotation);
@@ -55,9 +77,30 @@ public class Mover : MonoBehaviour
         if (other.gameObject.tag == "Hazards")
         {
             GetComponent<Mover>().ac = -0.2f;
-            transform.Rotate(Random.Range(-90, 90), Random.Range(-90, 90), Random.Range(-90, 90));
-            transform.Translate(0, 0, 2);
+            
+            
+            StartCoroutine(Delay());
         }
+        if (other.gameObject.tag == "power")
+        {
+            Destroy(other.gameObject);
 
+            StartCoroutine(Power());
+
+        }
     }
+  IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(t);
+    }
+    IEnumerator Power()
+    {
+     GetComponent<Mover>().ac = 0.3f;
+    
+     yield return new WaitForSeconds(t);
+     GetComponent<Mover>().ac = 0.05f;
+    
+     }
+
+
 }
