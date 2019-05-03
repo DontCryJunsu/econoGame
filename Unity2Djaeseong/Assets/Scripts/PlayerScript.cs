@@ -37,6 +37,7 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             forwardSpeed = -forwardSpeed;
+            upDown = upDown + 1;
 
         }
 
@@ -48,12 +49,15 @@ public class PlayerScript : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "buildingMover")
+        if (other.gameObject.tag == "buildingMoverDown"&& upDown % 2 == 0)
         {
-            other.transform.parent.Translate(0, moveDistance, 0);
+            other.transform.parent.Translate(0, -moveDistance, 0);
             
         }
-        else if(other.gameObject.tag == "buildingMover")
+        else if(other.gameObject.tag == "buildingMover"&& upDown % 2 == 1)
+        {
+            other.transform.parent.Translate(0, moveDistance, 0);
+        }
         if(other.gameObject.tag == "Hazards")
         {
             HP = HP - heatDamage;

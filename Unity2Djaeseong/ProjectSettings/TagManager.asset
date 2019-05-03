@@ -9,6 +9,7 @@ TagManager:
   - first
   - second
   - third
+  - buildingMoverDown
   layers:
   - Default
   - TransparentFX
