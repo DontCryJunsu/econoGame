@@ -10,6 +10,9 @@ TagManager:
   - second
   - third
   - buildingMoverDown
+  - brokenWindow
+  - bullet
+  - target
   layers:
   - Default
   - TransparentFX
